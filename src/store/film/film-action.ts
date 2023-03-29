@@ -3,17 +3,25 @@ import { IFilm } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState } from "../store"
 import { AnyAction } from "redux";
+import axios from "axios";
+import { IResponse } from "../../models/response-api.model";
 
-export const thunkSendMessage =
-    (list: IFilm[]): ThunkAction<void, ApplicationState, unknown, AnyAction> =>
-        async dispatch => {
-            const asyncResp = await exampleAPI()
-            dispatch(
-                saveList(list)
-            )
-        }
+const baseUrl = process.env.REACT_APP_API_URL as any as string
 
-function exampleAPI() {
+export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, AnyAction> =>
+    async dispatch => {
+        dispatch(updateLoading(true))
+
+        await axios.get<IResponse<IFilm>>(baseUrl).then(response => {
+            dispatch(saveList(response.data.results))
+        }).catch(err => {
+            console.log(err)
+        }).finally(() => {
+            dispatch(updateLoading(false))
+        })
+    }
+
+const exampleAPI = () => {
     return Promise.resolve([{
         title: "test1"
     } as any as IFilm])
@@ -31,6 +39,5 @@ const updateLoading = (newStatus: boolean) => ({
 
 
 export default {
-    saveList,
-    updateLoading
+    loadFilmList
 };
