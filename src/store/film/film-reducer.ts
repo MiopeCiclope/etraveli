@@ -29,6 +29,11 @@ const filmReducer = (state = INITIAL_STATE, action: IFilmAction) => {
                 ...state,
                 isLoading: action.payload as boolean
             }
+        case types.SELECT_FILM:
+            return {
+                ...state,
+                selected: action.payload as IFilm
+            }
         default: return state;
     }
 }
