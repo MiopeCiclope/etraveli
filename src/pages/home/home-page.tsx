@@ -21,7 +21,7 @@ const HomePage = (props: IHomePageProp) => {
 
   useEffect(() => {
     fetchFilms()
-  }, [])
+  }, [fetchFilms])
 
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "row" }}>
@@ -30,8 +30,19 @@ const HomePage = (props: IHomePageProp) => {
           films.map((film: IFilm) =>
             <span key={film.episode_id} onClick={() => select(film)} >{film.title}</span>)}
       </div>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column", backgroundColor: "black", color: "white" }}>
-        {selectedFilm && <h5>{selectedFilm.title}</h5>}
+      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+        {selectedFilm &&
+          <>
+            <h5>{selectedFilm.title}</h5>
+            <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
+            <ul>
+              {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
+                selectedFilm.ratings.map((rating, index) =>
+                  <li key={index}>{`${rating.Source} - ${rating.Value}`}</li>)
+              }
+            </ul>
+          </>
+        }
       </div>
 
       {/* <button onClick={fetchFilms} >test</button> */}
