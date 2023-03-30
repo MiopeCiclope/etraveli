@@ -1,4 +1,4 @@
-import types from "./film-types";
+import { SAVE_LIST, SELECT_FILM, UPDATE_FILTER, UPDATE_LOADING } from "./film-types";
 import { IFilm, IRating } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState } from "../store"
@@ -77,22 +77,22 @@ const calculateRatings = (ratings: { Source: string, Value: string }[]) => {
 }
 
 export const selectFilm = (film: IFilm) => ({
-    type: types.SELECT_FILM,
+    type: SELECT_FILM,
     payload: film
 });
 
 
 const saveList = (filmList: IFilm[]) => ({
-    type: types.SAVE_LIST,
+    type: SAVE_LIST,
     payload: filmList
 });
 
 const updateLoading = (newStatus: boolean) => ({
-    type: types.UPDATE_LOADING,
+    type: UPDATE_LOADING,
     payload: newStatus
 });
 
 export const updateFilter = (filter: IFilterOptions) => ({
-    type: types.UPDATE_FILTER,
+    type: UPDATE_FILTER,
     payload: filter
 });

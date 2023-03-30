@@ -1,9 +1,26 @@
 import React from 'react'
+import { SearchBarWrapper } from './styles'
 
-const SearchBar = () => {
-  return (
-    <div>SearchBar</div>
-  )
+export interface SearchBarProps {
+  /**
+   * Search string
+   */
+  value?: string;
+  /**
+   * Placeholder when value empty
+   */
+  placeholder: string;
+  /**
+   * On change handler
+   */
+  onChange: () => void;
 }
 
-export default SearchBar
+/**
+ * SearchBar for any kind of list filtering
+ */
+export const SearchBar = (props: SearchBarProps) => {
+  return (
+    <SearchBarWrapper value={props.value} placeholder={props.placeholder} onChange={props.onChange} />
+  )
+}

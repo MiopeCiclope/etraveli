@@ -1,4 +1,4 @@
-import types from "./film-types";
+import { SAVE_LIST, SELECT_FILM, UPDATE_FILTER, UPDATE_LOADING } from "./film-types";
 import { IFilm } from "../../models/film-model";
 
 export interface IFilterOptions {
@@ -26,22 +26,22 @@ const INITIAL_STATE = {
 
 const filmReducer = (state = INITIAL_STATE, action: IFilmAction) => {
     switch (action.type) {
-        case types.SAVE_LIST:
+        case SAVE_LIST:
             return {
                 ...state,
                 list: action.payload as IFilm[]
             }
-        case types.UPDATE_LOADING:
+        case UPDATE_LOADING:
             return {
                 ...state,
                 isLoading: action.payload as boolean
             }
-        case types.SELECT_FILM:
+        case SELECT_FILM:
             return {
                 ...state,
                 selected: action.payload as IFilm
             }
-        case types.UPDATE_FILTER:
+        case UPDATE_FILTER:
             return {
                 ...state,
                 filterOptions: action.payload
