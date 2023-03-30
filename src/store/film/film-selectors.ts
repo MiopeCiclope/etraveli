@@ -33,9 +33,9 @@ const sortByProperty = (films: IFilm[], filterOptions: IFilterOptions) => {
                 comparison = -1;
             }
         } else if (filterOptions.sort === "created") {
-            if (a[filterOptions.sort].getTime() > b[filterOptions.sort].getTime()) {
+            if (new Date(a[filterOptions.sort]).getTime() > new Date(b[filterOptions.sort]).getTime()) {
                 comparison = 1;
-            } else if (a[filterOptions.sort].getTime() < b[filterOptions.sort].getTime()) {
+            } else if (new Date(a[filterOptions.sort]).getTime() < new Date(b[filterOptions.sort]).getTime()) {
                 comparison = -1;
             }
         }

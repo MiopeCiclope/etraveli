@@ -23,6 +23,8 @@ type IHomePageProp = StateProps & DispatchProps;
 const HomePage = (props: IHomePageProp) => {
   const { films, selectedFilm, filmFilter, fetchFilms, select, filter } = props
   const [searchString, setSearchString] = useState("")
+  const [sortDate, setSortDate] = useState(0)
+  const [sortEpisode, setSortEpisode] = useState(0)
 
   useEffect(() => {
     fetchFilms()
@@ -37,10 +39,32 @@ const HomePage = (props: IHomePageProp) => {
     filter(newFilter)
     setSearchString(value)
   }
+
+  const triggerSort = (sortValue: number, updateFunction: React.Dispatch<React.SetStateAction<number>>, type: "date" | "episode") => {
+    setSortDate(0)
+    setSortEpisode(0)
+
+    const newValue = (sortValue + 1) % 3
+    updateFunction(newValue)
+
+    const newFilter = { ...filmFilter }
+    newFilter.sort = undefined
+    newFilter.sortDirection = undefined
+
+    if (newValue > 0) {
+      newFilter.sort = type === "date" ? "created" : "episode_id"
+      newFilter.sortDirection = newValue === 1 ? "asc" : "desc"
+    }
+
+    filter(newFilter)
+  }
+
   return (
     <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "column" }}>
       <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "row" }}>
-        <input value={searchString} onChange={handleInputChange} style={{ display: "flex", flex: 1 }} />
+        <input value={searchString} onChange={handleInputChange} style={{ display: "flex", flex: 1, maxHeight: 50 }} />
+        <button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button>
+        <button value={sortEpisode} onClick={() => triggerSort(sortEpisode, setSortEpisode, "episode")}>Sort by Episode</button>
       </div>
       <div style={{ width: "100%", height: "100%", display: "flex", flex: 6, flexDirection: "row" }}>
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
