@@ -1,48 +1,67 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store/store';
 import { IFilm } from "../../models/film-model";
-import filmAction from '../../store/film/film-action';
+import { selectFilm, updateFilter, loadFilmList } from '../../store/film/film-actions';
+import { IFilterOptions } from '../../store/film/film-reducer';
+import { getFilmList } from '../../store/film/film-selectors';
 
 interface StateProps {
   films: IFilm[]
   selectedFilm?: IFilm
+  filmFilter?: IFilterOptions
 }
 
 interface DispatchProps {
   fetchFilms: () => void
   select: (selected: IFilm) => void
+  filter: (filterOptions: IFilterOptions) => void
 }
 
 type IHomePageProp = StateProps & DispatchProps;
 
 const HomePage = (props: IHomePageProp) => {
-  const { films, selectedFilm, fetchFilms, select } = props
+  const { films, selectedFilm, filmFilter, fetchFilms, select, filter } = props
+  const [searchString, setSearchString] = useState("")
 
   useEffect(() => {
     fetchFilms()
   }, [fetchFilms])
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    const newFilter = { ...filmFilter }
+    newFilter.search = (value.length >= 3) ? value : undefined
+
+    filter(newFilter)
+    setSearchString(value)
+  }
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "row" }}>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
-        {films && films.length > 0 &&
-          films.map((film: IFilm) =>
-            <span key={film.episode_id} onClick={() => select(film)} >{film.title}</span>)}
+    <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "column" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "row" }}>
+        <input value={searchString} onChange={handleInputChange} style={{ display: "flex", flex: 1 }} />
       </div>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
-        {selectedFilm &&
-          <>
-            <h5>{selectedFilm.title}</h5>
-            <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
-            <ul>
-              {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
-                selectedFilm.ratings.map((rating, index) =>
-                  <li key={index}>{`${rating.Source} - ${rating.Value}`}</li>)
-              }
-            </ul>
-          </>
-        }
+      <div style={{ width: "100%", height: "100%", display: "flex", flex: 6, flexDirection: "row" }}>
+        <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+          {films && films.length > 0 &&
+            getFilmList(films, filmFilter)?.map((film: IFilm) =>
+              <span key={film.episode_id} onClick={() => select(film)} >{film.title}</span>)}
+        </div>
+        <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+          {selectedFilm &&
+            <>
+              <h5>{selectedFilm.title}</h5>
+              <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
+              <ul>
+                {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
+                  selectedFilm.ratings.map((rating, index) =>
+                    <li key={index}>{`${rating.Source} - ${rating.Value}`}</li>)
+                }
+              </ul>
+            </>
+          }
+        </div>
       </div>
 
       {/* <button onClick={fetchFilms} >test</button> */}
@@ -52,13 +71,15 @@ const HomePage = (props: IHomePageProp) => {
 
 const mapStateToProps = (state: ApplicationState) => ({
   films: state.filmReducer.list,
-  selectedFilm: state.filmReducer.selected
+  selectedFilm: state.filmReducer.selected,
+  filmFilter: state.filmReducer.filterOptions
 });
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    fetchFilms: () => dispatch(filmAction.loadFilmList()),
-    select: (film: IFilm) => dispatch(filmAction.selectFilm(film))
+    fetchFilms: () => dispatch(loadFilmList()),
+    select: (film: IFilm) => dispatch(selectFilm(film)),
+    filter: (filterOptions: IFilterOptions) => dispatch(updateFilter(filterOptions)),
   };
 };
 

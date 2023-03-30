@@ -6,6 +6,7 @@ import { AnyAction } from "redux";
 import axios from "axios";
 import { IResponse } from "../../models/response-api.model";
 import { IImdbResponse } from "../../models/imdb-api.model";
+import { IFilterOptions } from "./film-reducer";
 
 const baseUrl = process.env.REACT_APP_API_URL as any as string
 const imdbUrl = process.env.REACT_APP_IMDB_API_URL as any as string
@@ -33,7 +34,7 @@ export const selectFilm = (selected: IFilm): ThunkAction<void, ApplicationState,
         await axios.get<IImdbResponse>(searchString).then(response => {
             selected.poster = response.data.Poster
             selected.ratings = response.data.Ratings
-            
+
             dispatch(storeSelectedFilm(selected))
         }).catch(err => {
             console.log("select film: ", err)
@@ -58,8 +59,7 @@ const updateLoading = (newStatus: boolean) => ({
     payload: newStatus
 });
 
-
-export default {
-    loadFilmList,
-    selectFilm
-};
+export const updateFilter = (filter: IFilterOptions) => ({
+    type: types.UPDATE_FILTER,
+    payload: filter
+});
