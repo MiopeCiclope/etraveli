@@ -8,7 +8,7 @@ export const getFilmList = (films?: IFilm[], filterOptions?: IFilterOptions) => 
             : films
 
         resultList = filterOptions.sort ?
-            sortByProperty(films, filterOptions)
+            sortByProperty(resultList, filterOptions)
             : resultList
 
         return resultList

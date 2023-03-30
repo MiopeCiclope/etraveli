@@ -1,5 +1,3 @@
-import { IImdbResponse } from "./imdb-api.model"
-
 export interface IRating {
     source: string
     value: number

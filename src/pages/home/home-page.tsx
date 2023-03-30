@@ -10,6 +10,7 @@ interface StateProps {
   films: IFilm[]
   selectedFilm?: IFilm
   filmFilter?: IFilterOptions
+  loading: boolean
 }
 
 interface DispatchProps {
@@ -21,7 +22,7 @@ interface DispatchProps {
 type IHomePageProp = StateProps & DispatchProps;
 
 const HomePage = (props: IHomePageProp) => {
-  const { films, selectedFilm, filmFilter, fetchFilms, select, filter } = props
+  const { films, selectedFilm, filmFilter, loading, fetchFilms, select, filter } = props
   const [searchString, setSearchString] = useState("")
   const [sortDate, setSortDate] = useState(0)
   const [sortEpisode, setSortEpisode] = useState(0)
@@ -80,12 +81,14 @@ const HomePage = (props: IHomePageProp) => {
         <button value={sortRating} onClick={() => triggerSort(sortRating, setSortRating, "rating")}>Sort by Rating</button>
       </div>
       <div style={{ width: "100%", height: "100%", display: "flex", flex: 6, flexDirection: "row" }}>
+        {loading && <div>Fetching data ....</div>}
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
           {films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
               <span key={film.episode_id} onClick={() => select(film)} >{`${film.title} - ${film.averageRating}`}</span>)}
         </div>
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+          {!selectedFilm && <div> You can click a film on the list</div>}
           {selectedFilm &&
             <>
               <h5>{selectedFilm.title}</h5>
@@ -107,7 +110,8 @@ const HomePage = (props: IHomePageProp) => {
 const mapStateToProps = (state: ApplicationState) => ({
   films: state.filmReducer.list,
   selectedFilm: state.filmReducer.selected,
-  filmFilter: state.filmReducer.filterOptions
+  filmFilter: state.filmReducer.filterOptions,
+  loading: state.filmReducer.isLoading
 });
 
 const mapDispatchToProps = (dispatch: any) => {
