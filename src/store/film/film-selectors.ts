@@ -23,16 +23,16 @@ const sortByProperty = (films: IFilm[], filterOptions: IFilterOptions) => {
     return films.sort((a, b) => {
         let comparison = 0;
 
-        if (filterOptions.sort === "episode_id") {
-            const propA = a[filterOptions.sort];
-            const propB = b[filterOptions.sort];
+        if (filterOptions.sort !== "created") {
+            const propA = a[filterOptions.sort as keyof IFilm];
+            const propB = b[filterOptions.sort as keyof IFilm];
 
             if (propA > propB) {
                 comparison = 1;
             } else if (propA < propB) {
                 comparison = -1;
             }
-        } else if (filterOptions.sort === "created") {
+        } else {
             if (new Date(a[filterOptions.sort]).getTime() > new Date(b[filterOptions.sort]).getTime()) {
                 comparison = 1;
             } else if (new Date(a[filterOptions.sort]).getTime() < new Date(b[filterOptions.sort]).getTime()) {
