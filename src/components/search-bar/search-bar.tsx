@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { SearchBarWrapper } from './styles'
 
 export interface SearchBarProps {
@@ -13,14 +13,21 @@ export interface SearchBarProps {
   /**
    * On change handler
    */
-  onChange: () => void;
+  onChange: (event?: ChangeEvent<HTMLInputElement>) => void
 }
 
 /**
- * SearchBar for any kind of list filtering
+ * SearchBar for list filtering
  */
 export const SearchBar = (props: SearchBarProps) => {
+  const [inputValue, setInputValue] = useState(props.value);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    props.onChange(event);
+  };
+
   return (
-    <SearchBarWrapper value={props.value} placeholder={props.placeholder} onChange={props.onChange} />
+    <SearchBarWrapper value={inputValue} placeholder={props.placeholder} onChange={handleInputChange} />
   )
 }

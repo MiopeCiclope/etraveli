@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof SearchBar> = (args) => <SearchBar {...args
 
 export const Default = Template.bind({});
 Default.args = {
-    value: "",
+    value: "test",
     placeholder: "Type search here",
     onChange: () => console.log("click")
 };
