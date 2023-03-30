@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from 'react'
-import { SearchBarWrapper } from './styles'
+import { SearchBarWrapper, Text, IconWrapper } from './styles'
+import { AiOutlineSearch } from 'react-icons/ai';
 
 export interface SearchBarProps {
   /**
@@ -28,6 +29,11 @@ export const SearchBar = (props: SearchBarProps) => {
   };
 
   return (
-    <SearchBarWrapper value={inputValue} placeholder={props.placeholder} onChange={handleInputChange} />
+    <SearchBarWrapper>
+      <IconWrapper>
+        <AiOutlineSearch size={20} />
+      </IconWrapper>
+      <Text value={inputValue} placeholder={props.placeholder} onChange={handleInputChange} />
+    </SearchBarWrapper>
   )
 }
