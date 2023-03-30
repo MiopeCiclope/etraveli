@@ -5,6 +5,8 @@ import { IFilm } from "../../models/film-model";
 import { selectFilm, updateFilter, loadFilmList } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
+import { Body, Header, HomeWrapper, SortButtonWrapper } from './styles';
+import { SearchBar } from '../../components/search-bar/search-bar';
 
 interface StateProps {
   films: IFilm[]
@@ -32,14 +34,14 @@ const HomePage = (props: IHomePageProp) => {
     fetchFilms()
   }, [fetchFilms])
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+  const handleInputChange = (event?: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event?.target.value;
 
     const newFilter = { ...filmFilter }
-    newFilter.search = (value.length >= 3) ? value : undefined
+    newFilter.search = (value && value.length >= 3) ? value : undefined
 
     filter(newFilter)
-    setSearchString(value)
+    setSearchString(value as string)
   }
 
   const triggerSort = (sortValue: number, updateFunction: React.Dispatch<React.SetStateAction<number>>, type: "date" | "episode" | "rating") => {
@@ -73,14 +75,16 @@ const HomePage = (props: IHomePageProp) => {
   }
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "column" }}>
-      <div style={{ width: "100%", height: "100%", display: "flex", flex: 1, flexDirection: "row" }}>
-        <input value={searchString} onChange={handleInputChange} style={{ display: "flex", flex: 1, maxHeight: 50 }} />
-        <button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button>
-        <button value={sortEpisode} onClick={() => triggerSort(sortEpisode, setSortEpisode, "episode")}>Sort by Episode</button>
-        <button value={sortRating} onClick={() => triggerSort(sortRating, setSortRating, "rating")}>Sort by Rating</button>
-      </div>
-      <div style={{ width: "100%", height: "100%", display: "flex", flex: 6, flexDirection: "row" }}>
+    <HomeWrapper>
+      <Header>
+        <SearchBar value={searchString} onChange={handleInputChange} placeholder="Type search here..." />
+        <SortButtonWrapper>
+          <button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button>
+          <button value={sortEpisode} onClick={() => triggerSort(sortEpisode, setSortEpisode, "episode")}>Sort by Episode</button>
+          <button value={sortRating} onClick={() => triggerSort(sortRating, setSortRating, "rating")}>Sort by Rating</button>
+        </SortButtonWrapper>
+      </Header>
+      <Body>
         {loading && <div>Fetching data ....</div>}
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
           {films && films.length > 0 &&
@@ -102,8 +106,8 @@ const HomePage = (props: IHomePageProp) => {
             </>
           }
         </div>
-      </div>
-    </div>
+      </Body>
+    </HomeWrapper>
   )
 }
 

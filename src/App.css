@@ -42,4 +42,11 @@ html,
 body,
 #root {
   height: 100%;
+  width: 100%;
+  background-color: #373737;
+}
+
+#root {
+  padding: 40px;
+  box-sizing: border-box;
 }
