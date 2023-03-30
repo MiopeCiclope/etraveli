@@ -70,7 +70,7 @@ const HomePage = (props: IHomePageProp) => {
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
           {films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
-              <span key={film.episode_id} onClick={() => select(film)} >{film.title}</span>)}
+              <span key={film.episode_id} onClick={() => select(film)} >{`${film.title} - ${film.averageRating}`}</span>)}
         </div>
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
           {selectedFilm &&
@@ -80,15 +80,13 @@ const HomePage = (props: IHomePageProp) => {
               <ul>
                 {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
                   selectedFilm.ratings.map((rating, index) =>
-                    <li key={index}>{`${rating.Source} - ${rating.Value}`}</li>)
+                    <li key={index}>{`${rating.source} - ${rating.value}`}</li>)
                 }
               </ul>
             </>
           }
         </div>
       </div>
-
-      {/* <button onClick={fetchFilms} >test</button> */}
     </div>
   )
 }

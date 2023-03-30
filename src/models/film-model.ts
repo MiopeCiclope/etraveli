@@ -1,5 +1,10 @@
 import { IImdbResponse } from "./imdb-api.model"
 
+export interface IRating {
+    source: string
+    value: number
+}
+
 export interface IFilm {
     title: string
     episode_id: number
@@ -15,9 +20,7 @@ export interface IFilm {
     created: Date
     edited: Date
     url: string
-    poster?: string
-    ratings?: {
-        Source: string
-        Value: string
-    }[]
+    poster: string
+    ratings: IRating[]
+    averageRating: number
 }

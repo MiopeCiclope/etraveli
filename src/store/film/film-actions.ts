@@ -1,5 +1,5 @@
 import types from "./film-types";
-import { IFilm } from "../../models/film-model";
+import { IFilm, IRating } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState } from "../store"
 import { AnyAction } from "redux";
@@ -16,34 +16,67 @@ export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, Any
     async dispatch => {
         dispatch(updateLoading(true))
 
-        await axios.get<IResponse<IFilm>>(baseUrl).then(response => {
-            dispatch(saveList(response.data.results))
+        const filmList = await axios.get<IResponse<IFilm>>(baseUrl).then(response => {
+            return response.data.results
         }).catch(err => {
             console.log("film list load: ", err)
+            dispatch(updateLoading(false))
+            return [] as IFilm[]
         }).finally(() => {
             dispatch(updateLoading(false))
         })
-    }
 
-// Change it to check if data was already loaded
-export const selectFilm = (selected: IFilm): ThunkAction<void, ApplicationState, unknown, AnyAction> =>
-    async dispatch => {
-        dispatch(updateLoading(true))
-        const searchString = `${imdbUrl}t=star+wars+episode+${episodeRomanDigits[selected.episode_id]}`
-
-        await axios.get<IImdbResponse>(searchString).then(response => {
-            selected.poster = response.data.Poster
-            selected.ratings = response.data.Ratings
-
-            dispatch(storeSelectedFilm(selected))
-        }).catch(err => {
-            console.log("select film: ", err)
-        }).finally(() => {
+        await Promise.all(filmList.map(async (film) => {
+            return await fetchFilmDetails(film)
+        })).then(result =>
+            dispatch(saveList(result as any as IFilm[]))
+        ).finally(() => {
             dispatch(updateLoading(false))
         })
+
     }
 
-const storeSelectedFilm = (film: IFilm) => ({
+const fetchFilmDetails = async (film: IFilm) => {
+    const searchString = `${imdbUrl}t=star+wars+episode+${episodeRomanDigits[film.episode_id]}`
+
+    return await axios.get<IImdbResponse>(searchString).then(response => {
+        film.poster = response.data.Poster
+
+        const standardRatings = calculateRatings(response.data.Ratings)
+        film.ratings = standardRatings.ratings
+        film.averageRating = standardRatings.average
+
+        return film
+    }).catch(err => {
+        console.log("film detail fetch: ", err)
+        return null
+    })
+}
+
+const calculateRatings = (ratings: { Source: string, Value: string }[]) => {
+    let ratingSum = 0
+    const filmRatings = ratings.map(rating => {
+        let value = 0
+        switch (rating.Source) {
+            case "Internet Movie Database":
+                value = Number(rating.Value.split("/")[0]) * 10
+                break;
+            case "Rotten Tomatoes":
+                value = Number(rating.Value.split("%")[0])
+                break;
+            case "Metacritic":
+                value = Number(rating.Value.split("/")[0])
+                break;
+            default:
+                break;
+        }
+        ratingSum += value
+        return { source: rating.Source, value } as IRating
+    })
+    return { ratings: filmRatings, average: ratingSum / ratings.length }
+}
+
+export const selectFilm = (film: IFilm) => ({
     type: types.SELECT_FILM,
     payload: film
 });
