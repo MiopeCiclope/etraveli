@@ -30,7 +30,7 @@ export const SearchBar = (props: SearchBarProps) => {
 
   return (
     <SearchBarWrapper>
-      <IconWrapper>
+      <IconWrapper data-testid="searchIcon">
         <AiOutlineSearch size={20} />
       </IconWrapper>
       <Text value={inputValue} placeholder={props.placeholder} onChange={handleInputChange} />

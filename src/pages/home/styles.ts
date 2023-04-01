@@ -10,10 +10,6 @@ export const HomeWrapper = styled.div`
     padding: 15px;
     box-sizing: border-box;
     border-radius: 10px;
-
-    div {
-        background-color: lightgray;
-    }
 `
 
 export const Header = styled.div`
