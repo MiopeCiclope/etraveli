@@ -7,6 +7,7 @@ import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
 import { Body, Header, HomeWrapper, SortButtonWrapper } from './styles';
 import { SearchBar } from '../../components/search-bar/search-bar';
+import { SortButton } from '../../components/sort-button/sort-button';
 
 interface StateProps {
   films: IFilm[]
@@ -79,7 +80,8 @@ const HomePage = (props: IHomePageProp) => {
       <Header>
         <SearchBar value={searchString} onChange={handleInputChange} placeholder="Type search here..." />
         <SortButtonWrapper>
-          <button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button>
+          <SortButton title="Date" buttonState='desc' color='black' backgroundColor='white' onClick={() => console.log("test")} />
+          {/* ButtonWrapper<button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button> */}
           <button value={sortEpisode} onClick={() => triggerSort(sortEpisode, setSortEpisode, "episode")}>Sort by Episode</button>
           <button value={sortRating} onClick={() => triggerSort(sortRating, setSortRating, "rating")}>Sort by Rating</button>
         </SortButtonWrapper>

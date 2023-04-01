@@ -30,11 +30,12 @@ export const Body = styled.div`
     padding: 5px;
     flex-grow: 1;
     border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;    
+    border-bottom-right-radius: 5px;   
 `
 export const SortButtonWrapper = styled.div`
     display: flex;
     flex: 1;
     flex-direction: row;
     max-width: 20%;
+    align-items: center;
 `
