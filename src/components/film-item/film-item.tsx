@@ -1,7 +1,7 @@
 import React from 'react'
-import { AiFillStar } from 'react-icons/ai';
 import { IFilm } from '../../models/film-model';
-import { FilmListItem, ProgressBar, Title } from './styles';
+import { FilmListItem, Title } from './styles';
+import { ProgressBar } from '../progress-bar/progress-bar';
 
 export interface IFilmItemProps {
     /**
@@ -32,10 +32,7 @@ export const FilmItem = (props: IFilmItemProps) => {
     return (
         <FilmListItem onClick={props.onClick} isSelected={props.isSelected} data-testid="filmItem" >
             <Title>{`Episode ${film.episode_id}: ${film.title} `}</Title>
-            <ProgressBar percentage={film.averageRating} data-testid="progressBar" >
-                <span>{Math.floor(film.averageRating)}%  </span>
-                <AiFillStar color='#e0e007' size={15} />
-            </ProgressBar>
+            <ProgressBar percentage={film.averageRating} label={`${Math.floor(film.averageRating)}%`} />
             <span>{formattedDate}</span>
         </FilmListItem>
     )

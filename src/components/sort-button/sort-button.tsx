@@ -33,16 +33,16 @@ export interface SortButtonProps {
 
 export const SortButton = (props: SortButtonProps) => {
     return (
-        <ButtonWrapper 
+        <ButtonWrapper
             data-testid="sortButton"
-            color={props.color} 
-            backgroundColor={props.backgroundColor} 
-            activeBackgroundColor={props.activeBackgroundColor} 
+            color={props.color}
+            backgroundColor={props.backgroundColor}
+            activeBackgroundColor={props.activeBackgroundColor}
             onClick={props.onClick}
-            isSorting={props.buttonState!="off"}
+            isSorting={props.buttonState !== "off"}
         >
-            {props.buttonState === "asc" && <AscSortIcon data-testid="ascIcon"/>}
-            {props.buttonState === "desc" && <DescSortIcon data-testid="descIcon"/>}
+            {props.buttonState === "asc" && <AscSortIcon data-testid="ascIcon" />}
+            {props.buttonState === "desc" && <DescSortIcon data-testid="descIcon" />}
             <Button>{props.title}</Button>
         </ButtonWrapper>
     )

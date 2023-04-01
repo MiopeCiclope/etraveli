@@ -29,10 +29,8 @@ export const ListControls = styled.div`
 export const ListColumn = styled.div`
     display: flex;
     flex-direction: column;
+    flex: 1;  
     padding: 5px;
-    flex: 1;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;   
     border-right: solid lightgray 1px;
 `
 export const SortButtonWrapper = styled.div`
@@ -49,4 +47,12 @@ export const FilmList = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
+`
+
+export const DetailColumn = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 10px;
+    padding-top: 20px;
 `

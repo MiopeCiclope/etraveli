@@ -5,7 +5,7 @@ import { IFilm } from "../../models/film-model";
 import { selectFilm, updateSearch, loadFilmList, updateSort } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
-import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper } from './styles';
+import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, DetailColumn } from './styles';
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { SortButton } from '../../components/sort-button/sort-button';
 import { FilmItem } from '../../components/film-item/film-item';
@@ -82,7 +82,7 @@ const HomePage = (props: IHomePageProp) => {
             )}
         </FilmList>
       </ListColumn>
-      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+      <DetailColumn>
         {!selectedFilm && <div> You can click a film on the list</div>}
         {selectedFilm &&
           <>
@@ -96,7 +96,7 @@ const HomePage = (props: IHomePageProp) => {
             </ul>
           </>
         }
-      </div>
+      </DetailColumn>
     </HomeWrapper>
   )
 }
