@@ -1,18 +1,20 @@
 import styled from "styled-components";
 
 export const HomeWrapper = styled.div`
-    width: 100%;
     height: 100%;
     display: flex;
     flex: 1;
     flex-direction: row;
     background-color: white;
     padding: 15px;
-    box-sizing: border-box;
     border-radius: 10px;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
 `
 
-export const Header = styled.div`
+export const ListControls = styled.div`
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -24,13 +26,14 @@ export const Header = styled.div`
     border-top-right-radius: 5px;
 `
 
-export const Body = styled.div`
+export const ListColumn = styled.div`
     display: flex;
     flex-direction: column;
     padding: 5px;
     flex: 1;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;   
+    border-right: solid lightgray 1px;
 `
 export const SortButtonWrapper = styled.div`
     display: flex;
@@ -39,5 +42,11 @@ export const SortButtonWrapper = styled.div`
     width: 100%;
     align-items: center;
     justify-content: left;
-    max-height: 40px;
+    flex-wrap: wrap;
+`
+
+export const FilmList = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: column;
 `

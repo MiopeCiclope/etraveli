@@ -18,6 +18,10 @@ export interface SortButtonProps {
      */
     backgroundColor: string;
     /**
+     * Button background color when active
+     */
+    activeBackgroundColor: string;
+    /**
      * Button title
     */
     title: string;
@@ -30,8 +34,10 @@ export interface SortButtonProps {
 export const SortButton = (props: SortButtonProps) => {
     return (
         <ButtonWrapper 
+            data-testid="sortButton"
             color={props.color} 
             backgroundColor={props.backgroundColor} 
+            activeBackgroundColor={props.activeBackgroundColor} 
             onClick={props.onClick}
             isSorting={props.buttonState!="off"}
         >

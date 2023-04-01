@@ -4,6 +4,7 @@ import { BsSortNumericUpAlt, BsSortNumericDown } from 'react-icons/bs';
 interface IButtonProp {
     color: string;
     backgroundColor: string;
+    activeBackgroundColor: string;
     isSorting: boolean;
 }
 
@@ -18,26 +19,27 @@ export const ButtonWrapper = styled.div<IButtonProp>`
     padding-inline: 5px;
     align-items: center;
     margin-inline: 10px;
-    ${props => props.isSorting ? "" : "border: solid lightgray 1px;"}
-
+    border: solid lightgray 1px;
     color: ${props => props.color};
-    background-color: ${props => props.backgroundColor};
-
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: ${props => props.isSorting ?
+        props.activeBackgroundColor
+        : props.backgroundColor};
+            
     button {
         color: ${props => props.color};
     }
     
     &:hover {
-        color: ${props => props.backgroundColor};
-        background-color: ${props => props.color};
-        box-shadow: 0 0 5px ${props => props.color};
+        background-color: ${props => props.activeBackgroundColor};
+        box-shadow: 0 0 5px gray;
         transform: scale(1.01);
         border: none;
         
         button,
         svg {
-            color: ${props => props.backgroundColor};
-            background-color: ${props => props.color}; 
+            background-color: ${props => props.activeBackgroundColor}; 
         }
     }
 `
@@ -58,4 +60,8 @@ export const Button = styled.button`
     justify-content: center;
     border: none;
     background-color: transparent;
+    
+    &:hover {
+        cursor: pointer;
+    }
 `

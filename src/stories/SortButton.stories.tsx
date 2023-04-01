@@ -16,6 +16,7 @@ SortButtonOff.args = {
     buttonState: 'off',
     color: 'black',
     backgroundColor: 'white',
+    activeBackgroundColor: 'lightgreen',
     onClick: () => console.log("test")
 };
 
@@ -25,6 +26,7 @@ SortButtonAsc.args = {
     buttonState: 'asc',
     color: 'black',
     backgroundColor: 'white',
+    activeBackgroundColor: 'lightgreen',
     onClick: () => console.log("test")
 };
 
@@ -34,5 +36,6 @@ SortButtonDesc.args = {
     buttonState: 'desc',
     color: 'black',
     backgroundColor: 'white',
+    activeBackgroundColor: 'lightgreen',
     onClick: () => console.log("test")
 };

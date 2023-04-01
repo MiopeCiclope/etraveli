@@ -5,9 +5,10 @@ import { IFilm } from "../../models/film-model";
 import { selectFilm, updateSearch, loadFilmList, updateSort } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
-import { Body, Header, HomeWrapper, SortButtonWrapper } from './styles';
+import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper } from './styles';
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { SortButton } from '../../components/sort-button/sort-button';
+import { FilmItem } from '../../components/film-item/film-item';
 
 interface StateProps {
   films: IFilm[]
@@ -42,7 +43,7 @@ const HomePage = (props: IHomePageProp) => {
     const titleDict: {
       [key: string]: string;
     } = {
-      "created": "Date",
+      "release_date": "Date",
       "episode_id": "Episode",
       "averageRating": "Rating"
     }
@@ -54,7 +55,9 @@ const HomePage = (props: IHomePageProp) => {
           key={property}
           title={titleDict[property]}
           buttonState={filmFilter?.sort === property ? filmFilter?.sortDirection ?? "off" : "off"}
-          color='black' backgroundColor='white'
+          color='black'
+          backgroundColor='white'
+          activeBackgroundColor="lightgreen"
           onClick={() => sort(property as keyof IFilm)}
         />)
       }
@@ -63,18 +66,22 @@ const HomePage = (props: IHomePageProp) => {
 
   return (
     <HomeWrapper>
-      <Body>
-        <Header>
+      <ListColumn>
+        <ListControls>
           <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
-          {makeSortButtons(["created", "episode_id", "averageRating"])}
-        </Header>
+          {makeSortButtons(["release_date", "episode_id", "averageRating"])}
+        </ListControls>
         {loading && <div>Fetching data ....</div>}
-        <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+        <FilmList >
           {films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
-              <span key={film.episode_id} onClick={() => select(film)} >{`${film.title} - ${film.averageRating}`}</span>)}
-        </div>
-      </Body>
+              <FilmItem
+                key={film.episode_id}
+                film={film}
+                onClick={() => select(film)} isSelected={selectedFilm !== undefined && selectedFilm.episode_id === film.episode_id} />
+            )}
+        </FilmList>
+      </ListColumn>
       <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
         {!selectedFilm && <div> You can click a film on the list</div>}
         {selectedFilm &&

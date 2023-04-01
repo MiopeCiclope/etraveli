@@ -46,4 +46,14 @@ describe('SortButton component', () => {
         expect(ascIcon).toBeNull()
         expect(descIcon).toBeInTheDocument();
     });
+
+
+    it('should render active background', () => {
+        const handleInputChange = jest.fn();
+
+        render(<SortButtonDesc {...SortButtonDesc.args as any} onChange={handleInputChange} />);
+        const button = screen.getByTestId("sortButton");
+
+        expect(button).toHaveStyle("background-color: lightgreen")
+    });
 });

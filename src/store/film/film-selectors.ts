@@ -23,7 +23,7 @@ const sortByProperty = (films: IFilm[], filterOptions: IFilterOptions) => {
     return films.sort((a, b) => {
         let comparison = 0;
 
-        if (filterOptions.sort !== "created") {
+        if (filterOptions.sort !== "release_date") {
             const propA = a[filterOptions.sort as keyof IFilm];
             const propB = b[filterOptions.sort as keyof IFilm];
 

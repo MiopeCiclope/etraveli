@@ -50,3 +50,10 @@ body,
   padding: 40px;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  #root {
+    padding: 0;
+    box-sizing: content-box;
+  }
+}
