@@ -48,6 +48,7 @@ const HomePage = (props: IHomePageProp) => {
     }
 
     return <SortButtonWrapper>
+      <small>Sort by:</small>
       {list.map(property =>
         <SortButton
           key={property}
@@ -62,33 +63,33 @@ const HomePage = (props: IHomePageProp) => {
 
   return (
     <HomeWrapper>
-      <Header>
-        <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
-        {makeSortButtons(["created", "episode_id", "averageRating"])}
-      </Header>
       <Body>
+        <Header>
+          <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
+          {makeSortButtons(["created", "episode_id", "averageRating"])}
+        </Header>
         {loading && <div>Fetching data ....</div>}
         <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
           {films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
               <span key={film.episode_id} onClick={() => select(film)} >{`${film.title} - ${film.averageRating}`}</span>)}
         </div>
-        <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
-          {!selectedFilm && <div> You can click a film on the list</div>}
-          {selectedFilm &&
-            <>
-              <h5>{selectedFilm.title}</h5>
-              <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
-              <ul>
-                {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
-                  selectedFilm.ratings.map((rating, index) =>
-                    <li key={index}>{`${rating.source} - ${rating.value}`}</li>)
-                }
-              </ul>
-            </>
-          }
-        </div>
       </Body>
+      <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+        {!selectedFilm && <div> You can click a film on the list</div>}
+        {selectedFilm &&
+          <>
+            <h5>{selectedFilm.title}</h5>
+            <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
+            <ul>
+              {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
+                selectedFilm.ratings.map((rating, index) =>
+                  <li key={index}>{`${rating.source} - ${rating.value}`}</li>)
+              }
+            </ul>
+          </>
+        }
+      </div>
     </HomeWrapper>
   )
 }

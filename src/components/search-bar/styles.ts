@@ -4,11 +4,12 @@ export const SearchBarWrapper = styled.div`
     display: flex;
     flex: 1;
     height: 30px;
-    max-width: 50%;
-    margin-inline: 20px;
+    width: 100%;
     flex-direction: row;
     border: solid gray 1px;
     border-radius: 15px;
+    max-width: 700px;
+    max-height: 35px;
 
     &:focus-within {
         outline-offset: 2px;

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BiSortDown, BiSortUp } from 'react-icons/bi';
+import { BsSortNumericUpAlt, BsSortNumericDown } from 'react-icons/bs';
 
 interface IButtonProp {
     color: string;
@@ -11,7 +11,8 @@ export const ButtonWrapper = styled.div<IButtonProp>`
     display: flex;
     flex-direction: row;
     min-width: 100px;
-    height: 30px;
+    max-width: 200px;
+    min-height: 25px;
     border: solid black 1px;
     border-radius: 10px;
     padding-inline: 5px;
@@ -41,12 +42,12 @@ export const ButtonWrapper = styled.div<IButtonProp>`
     }
 `
 
-export const AscSortIcon = styled(BiSortUp)`
+export const AscSortIcon = styled(BsSortNumericDown)`
     display: flex;
     flex: 1;
 `
 
-export const DescSortIcon = styled(BiSortDown)`
+export const DescSortIcon = styled(BsSortNumericUpAlt)`
     display: flex;
     flex: 1;
 `
