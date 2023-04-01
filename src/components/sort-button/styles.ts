@@ -4,18 +4,20 @@ import { BiSortDown, BiSortUp } from 'react-icons/bi';
 interface IButtonProp {
     color: string;
     backgroundColor: string;
+    isSorting: boolean;
 }
 
 export const ButtonWrapper = styled.div<IButtonProp>`
     display: flex;
     flex-direction: row;
-    width: 120px;
+    min-width: 100px;
     height: 30px;
     border: solid black 1px;
     border-radius: 10px;
     padding-inline: 5px;
     align-items: center;
     margin-inline: 10px;
+    ${props => props.isSorting ? "" : "border: solid lightgray 1px;"}
 
     color: ${props => props.color};
     background-color: ${props => props.backgroundColor};
@@ -29,7 +31,8 @@ export const ButtonWrapper = styled.div<IButtonProp>`
         background-color: ${props => props.color};
         box-shadow: 0 0 5px ${props => props.color};
         transform: scale(1.01);
-
+        border: none;
+        
         button,
         svg {
             color: ${props => props.backgroundColor};

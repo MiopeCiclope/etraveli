@@ -1,4 +1,4 @@
-import { SAVE_LIST, SELECT_FILM, UPDATE_FILTER, UPDATE_LOADING } from "./film-types";
+import { SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
 import { IFilm } from "../../models/film-model";
 
 export interface IFilterOptions {
@@ -21,7 +21,8 @@ export interface IFilmAction {
 
 const INITIAL_STATE = {
     list: [],
-    isLoading: false
+    isLoading: false,
+    filterOptions: {}
 } as IFilmReducerState
 
 const filmReducer = (state = INITIAL_STATE, action: IFilmAction) => {
@@ -41,10 +42,22 @@ const filmReducer = (state = INITIAL_STATE, action: IFilmAction) => {
                 ...state,
                 selected: action.payload as IFilm
             }
-        case UPDATE_FILTER:
+        case UPDATE_SEARCH:
             return {
                 ...state,
-                filterOptions: action.payload
+                filterOptions: {
+                    ...state.filterOptions,
+                    search: action.payload
+                }
+            }
+        case UPDATE_SORT:
+            return {
+                ...state,
+                filterOptions: {
+                    ...state.filterOptions,
+                    sort: action.payload.sort,
+                    sortDirection: action.payload.direction,
+                }
             }
         default: return state;
     }

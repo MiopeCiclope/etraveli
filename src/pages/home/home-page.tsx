@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store/store';
 import { IFilm } from "../../models/film-model";
-import { selectFilm, updateFilter, loadFilmList } from '../../store/film/film-actions';
+import { selectFilm, updateSearch, loadFilmList, updateSort } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
 import { Body, Header, HomeWrapper, SortButtonWrapper } from './styles';
@@ -19,17 +19,14 @@ interface StateProps {
 interface DispatchProps {
   fetchFilms: () => void
   select: (selected: IFilm) => void
-  filter: (filterOptions: IFilterOptions) => void
+  search: (searchString?: string) => void
+  sort: (sortProporty: keyof IFilm) => void
 }
 
 type IHomePageProp = StateProps & DispatchProps;
 
 const HomePage = (props: IHomePageProp) => {
-  const { films, selectedFilm, filmFilter, loading, fetchFilms, select, filter } = props
-  const [searchString, setSearchString] = useState("")
-  const [sortDate, setSortDate] = useState(0)
-  const [sortEpisode, setSortEpisode] = useState(0)
-  const [sortRating, setSortRating] = useState(0)
+  const { films, selectedFilm, filmFilter, loading, fetchFilms, select, search, sort } = props
 
   useEffect(() => {
     fetchFilms()
@@ -37,54 +34,37 @@ const HomePage = (props: IHomePageProp) => {
 
   const handleInputChange = (event?: React.ChangeEvent<HTMLInputElement>) => {
     const value = event?.target.value;
-
-    const newFilter = { ...filmFilter }
-    newFilter.search = (value && value.length >= 3) ? value : undefined
-
-    filter(newFilter)
-    setSearchString(value as string)
+    search(value)
   }
 
-  const triggerSort = (sortValue: number, updateFunction: React.Dispatch<React.SetStateAction<number>>, type: "date" | "episode" | "rating") => {
-    setSortDate(0)
-    setSortEpisode(0)
-
-    const newValue = (sortValue + 1) % 3
-    updateFunction(newValue)
-
-    const newFilter = { ...filmFilter }
-    newFilter.sort = undefined
-    newFilter.sortDirection = undefined
-
-    if (newValue > 0) {
-      switch (type) {
-        case "date":
-          newFilter.sort = "created"
-          break;
-        case "episode":
-          newFilter.sort = "episode_id"
-          break;
-
-        case "rating":
-          newFilter.sort = "averageRating"
-          break;
-      }
-      newFilter.sortDirection = newValue === 1 ? "asc" : "desc"
+  //Makes easier to add new sorting buttons
+  const makeSortButtons = (list: string[]) => {
+    const titleDict: {
+      [key: string]: string;
+    } = {
+      "created": "Date",
+      "episode_id": "Episode",
+      "averageRating": "Rating"
     }
 
-    filter(newFilter)
+    return <SortButtonWrapper>
+      {list.map(property =>
+        <SortButton
+          key={property}
+          title={titleDict[property]}
+          buttonState={filmFilter?.sort === property ? filmFilter?.sortDirection ?? "off" : "off"}
+          color='black' backgroundColor='white'
+          onClick={() => sort(property as keyof IFilm)}
+        />)
+      }
+    </SortButtonWrapper>
   }
 
   return (
     <HomeWrapper>
       <Header>
-        <SearchBar value={searchString} onChange={handleInputChange} placeholder="Type search here..." />
-        <SortButtonWrapper>
-          <SortButton title="Date" buttonState='desc' color='black' backgroundColor='white' onClick={() => console.log("test")} />
-          {/* ButtonWrapper<button value={sortDate} onClick={() => triggerSort(sortDate, setSortDate, "date")}>Sort by Date</button> */}
-          <button value={sortEpisode} onClick={() => triggerSort(sortEpisode, setSortEpisode, "episode")}>Sort by Episode</button>
-          <button value={sortRating} onClick={() => triggerSort(sortRating, setSortRating, "rating")}>Sort by Rating</button>
-        </SortButtonWrapper>
+        <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
+        {makeSortButtons(["created", "episode_id", "averageRating"])}
       </Header>
       <Body>
         {loading && <div>Fetching data ....</div>}
@@ -124,7 +104,8 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     fetchFilms: () => dispatch(loadFilmList()),
     select: (film: IFilm) => dispatch(selectFilm(film)),
-    filter: (filterOptions: IFilterOptions) => dispatch(updateFilter(filterOptions)),
+    search: (searchString?: string) => dispatch(updateSearch(searchString)),
+    sort: (sortProporty: keyof IFilm) => dispatch(updateSort(sortProporty)),
   };
 };
 

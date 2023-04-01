@@ -1,12 +1,11 @@
-import { SAVE_LIST, SELECT_FILM, UPDATE_FILTER, UPDATE_LOADING } from "./film-types";
+import { SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
 import { IFilm, IRating } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
-import { ApplicationState } from "../store"
+import { ApplicationState, store } from "../store"
 import { AnyAction } from "redux";
 import axios from "axios";
 import { IResponse } from "../../models/response-api.model";
 import { IImdbResponse } from "../../models/imdb-api.model";
-import { IFilterOptions } from "./film-reducer";
 
 const baseUrl = process.env.REACT_APP_API_URL as any as string
 const imdbUrl = process.env.REACT_APP_IMDB_API_URL as any as string
@@ -92,7 +91,39 @@ const updateLoading = (newStatus: boolean) => ({
     payload: newStatus
 });
 
-export const updateFilter = (filter: IFilterOptions) => ({
-    type: UPDATE_FILTER,
-    payload: filter
+export const updateSearch = (searchString?: string) => ({
+    type: UPDATE_SEARCH,
+    payload: searchString
 });
+
+/*
+ * Three phase sort
+ *  - First call sort asc
+ *  - Second call sort desc
+ *  - Third call removes sort
+ * 
+ *  In case of a different sort property,
+ *  it "turns off" the other sort
+ */
+export const updateSort = (sort: keyof IFilm) => {
+    const sortDirectionOrder = ["off", "asc", "desc"]
+    const filter = store.getState().filmReducer.filterOptions
+
+    if (!filter?.sort) {
+        return {
+            type: UPDATE_SORT,
+            payload: { sort: sort, direction: "asc" }
+        }
+    } else if (filter?.sort === sort) {
+        const newSortIndex = (sortDirectionOrder.indexOf(filter?.sortDirection ?? "off") + 1) % 3
+        return {
+            type: UPDATE_SORT,
+            payload: { sort: sort, direction: sortDirectionOrder[newSortIndex] }
+        }
+    } else {
+        return {
+            type: UPDATE_SORT,
+            payload: { sort: sort, direction: "asc" }
+        }
+    }
+};
