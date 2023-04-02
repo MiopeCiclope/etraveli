@@ -5,7 +5,7 @@ import { IFilm } from "../../models/film-model";
 import { selectFilm, updateSearch, loadFilmList, updateSort } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
-import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, DetailColumn, YodaQuote } from './styles';
+import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, DetailColumn, YodaQuote, LoadingMessage, ErrorMessage } from './styles';
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { SortButton } from '../../components/sort-button/sort-button';
 import { FilmItem } from '../../components/film-item/film-item';
@@ -16,6 +16,7 @@ interface StateProps {
   selectedFilm?: IFilm
   filmFilter?: IFilterOptions
   loading: boolean
+  error?: string;
 }
 
 interface DispatchProps {
@@ -28,7 +29,7 @@ interface DispatchProps {
 type IHomePageProp = StateProps & DispatchProps;
 
 const HomePage = (props: IHomePageProp) => {
-  const { films, selectedFilm, filmFilter, loading, fetchFilms, select, search, sort } = props
+  const { films, selectedFilm, filmFilter, loading, error, fetchFilms, select, search, sort } = props
 
   useEffect(() => {
     fetchFilms()
@@ -73,8 +74,9 @@ const HomePage = (props: IHomePageProp) => {
           {makeSortButtons(["release_date", "episode_id", "averageRating"])}
         </ListControls>
         <FilmList >
-          {loading && <div>Fetching data ....</div>}
-          {films && films.length > 0 &&
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          {!error && loading && <LoadingMessage>fetching data...</LoadingMessage>}
+          {!error && films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
               <FilmItem
                 key={film.episode_id}
@@ -95,7 +97,8 @@ const mapStateToProps = (state: ApplicationState) => ({
   films: state.filmReducer.list,
   selectedFilm: state.filmReducer.selected,
   filmFilter: state.filmReducer.filterOptions,
-  loading: state.filmReducer.isLoading
+  loading: state.filmReducer.isLoading,
+  error: state.filmReducer.error,
 });
 
 const mapDispatchToProps = (dispatch: any) => {

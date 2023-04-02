@@ -69,3 +69,28 @@ export const YodaQuote = styled.img`
     max-height: 100%;
     border-radius: 2px;
 `
+
+export const LoadingMessage = styled.div`
+    text-align: center;
+    font-size: 20px;
+    font-family: monospace;
+    letter-spacing: 3px;
+    font-weight: 600;
+    color: gray;
+    font-variant-caps: small-caps;
+`
+
+export const ErrorMessage = styled.div`
+    text-align: center;
+    font-size: 20px;
+    font-family: monospace;
+    letter-spacing: 3px;
+    font-weight: 600;
+    background-color: #e16868;
+    width: fit-content;
+    margin-inline: auto;
+    color: white;
+    padding-inline: 30px;
+    border-radius: 15px;
+    font-variant-caps: small-caps;
+`

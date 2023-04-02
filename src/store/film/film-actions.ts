@@ -1,4 +1,4 @@
-import { SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
+import { ERROR, SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
 import { IFilm, IRating } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState, store } from "../store"
@@ -18,22 +18,34 @@ export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, Any
         const filmList = await axios.get<IResponse<IFilm>>(baseUrl).then(response => {
             return response.data.results
         }).catch(err => {
-            console.log("film list load: ", err)
             dispatch(updateLoading(false))
+            dispatch(errorMessage("fail to load film list"))
             return [] as IFilm[]
         }).finally(() => {
             dispatch(updateLoading(false))
         })
 
-        await Promise.all(filmList.map(async (film) => {
-            return await fetchFilmDetails(film)
-        })).then(result =>
-            dispatch(saveList(result as any as IFilm[]))
-        ).finally(() => {
-            dispatch(updateLoading(false))
-        })
+        if (filmList.length > 0) {
+            await Promise.allSettled(filmList.map(async (film) => {
+                return await fetchFilmDetails(film)
+            })).then(results => {
+                const errors = results.filter(result => result.status === 'rejected');
+                if (errors.length > 0) {
+                    dispatch(errorMessage((results[0] as any).reason.message))
+                    return;
+                }
 
+                dispatch(saveList(results as any as IFilm[]))
+            }
+            ).finally(() => {
+                dispatch(updateLoading(false))
+            })
+        }
     }
+const errorMessage = (errorMessage: string) => ({
+    type: ERROR,
+    payload: errorMessage
+});
 
 const fetchFilmDetails = async (film: IFilm) => {
     const searchString = `${imdbUrl}t=star+wars+episode+${episodeRomanDigits[film.episode_id]}`
@@ -47,8 +59,7 @@ const fetchFilmDetails = async (film: IFilm) => {
 
         return film
     }).catch(err => {
-        console.log("film detail fetch: ", err)
-        return null
+        throw Error(`fail to load film detail: ${film.title}`)
     })
 }
 
@@ -127,3 +138,4 @@ export const updateSort = (sort: keyof IFilm) => {
         }
     }
 };
+
