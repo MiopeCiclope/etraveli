@@ -13,21 +13,24 @@ export const ProgressBarWrapper = styled.div<IProgressBarWrapperProp>`
     font-weight: bold;
     color: gray;
     border: solid lightgray 1px;
-    border-radius: 50px;
+    border-radius: 10px;
     width: 150px;
-    height: 20px;
+    height: fit-content;
+    padding-left: 10px;
     background: linear-gradient(120deg
         , #0fbe26 0%
         , lightgreen ${props => props.percentage}%
         , white ${props => props.percentage + 1}%
         , white 100%);
     max-width: 150px;
-
     padding-inline: 5px;
+    margin-bottom: 5px;
     margin-inline: 10px;
+
     span {
         display: flex;
         flex: 1;
         justify-content: center;
+        padding: 2px;
     }
 `

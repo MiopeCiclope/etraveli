@@ -11,6 +11,7 @@ export const HomeWrapper = styled.div`
 
     @media (max-width: 768px) {
         flex-direction: column;
+        height: auto;
     }
 `
 
@@ -32,6 +33,10 @@ export const ListColumn = styled.div`
     flex: 1;  
     padding: 5px;
     border-right: solid lightgray 1px;
+
+    @media (max-width: 768px) {
+        border: none;
+    }
 `
 export const SortButtonWrapper = styled.div`
     display: flex;
@@ -55,4 +60,5 @@ export const DetailColumn = styled.div`
     flex-direction: column;
     padding: 10px;
     padding-top: 20px;
+    height: fit-content;
 `

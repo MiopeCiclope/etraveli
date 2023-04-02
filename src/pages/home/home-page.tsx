@@ -9,6 +9,7 @@ import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, Det
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { SortButton } from '../../components/sort-button/sort-button';
 import { FilmItem } from '../../components/film-item/film-item';
+import { FilmDetail } from '../../components/film-detail/film-detail';
 
 interface StateProps {
   films: IFilm[]
@@ -71,8 +72,8 @@ const HomePage = (props: IHomePageProp) => {
           <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
           {makeSortButtons(["release_date", "episode_id", "averageRating"])}
         </ListControls>
-        {loading && <div>Fetching data ....</div>}
         <FilmList >
+          {loading && <div>Fetching data ....</div>}
           {films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
               <FilmItem
@@ -84,18 +85,7 @@ const HomePage = (props: IHomePageProp) => {
       </ListColumn>
       <DetailColumn>
         {!selectedFilm && <div> You can click a film on the list</div>}
-        {selectedFilm &&
-          <>
-            <h5>{selectedFilm.title}</h5>
-            <img alt={`${selectedFilm.title}'s Poster`} src={selectedFilm.poster} style={{ maxHeight: 400, objectFit: "contain" }} />
-            <ul>
-              {selectedFilm.ratings && selectedFilm.ratings.length > 0 &&
-                selectedFilm.ratings.map((rating, index) =>
-                  <li key={index}>{`${rating.source} - ${rating.value}`}</li>)
-              }
-            </ul>
-          </>
-        }
+        {selectedFilm && <FilmDetail film={selectedFilm} />}
       </DetailColumn>
     </HomeWrapper>
   )
