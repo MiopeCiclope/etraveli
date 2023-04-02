@@ -50,11 +50,12 @@ const HomePage = (props: IHomePageProp) => {
       "averageRating": "Rating"
     }
 
-    return <SortButtonWrapper>
+    return <SortButtonWrapper data-testid="buttonSort">
       <small>Sort by:</small>
       {list.map(property =>
         <SortButton
           key={property}
+          data-testid={`sortButton${property}`}
           title={titleDict[property]}
           buttonState={filmFilter?.sort === property ? filmFilter?.sortDirection ?? "off" : "off"}
           color='black'
@@ -70,12 +71,12 @@ const HomePage = (props: IHomePageProp) => {
     <HomeWrapper>
       <ListColumn>
         <ListControls>
-          <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
+          <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." data-testid="searchBar" />
           {makeSortButtons(["release_date", "episode_id", "averageRating"])}
         </ListControls>
         <FilmList >
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          {!error && loading && <LoadingMessage>fetching data...</LoadingMessage>}
+          {error && <ErrorMessage data-testid="errorMessage">{error}</ErrorMessage>}
+          {!error && loading && <LoadingMessage data-testid="loadingMessage">fetching data...</LoadingMessage>}
           {!error && films && films.length > 0 &&
             getFilmList(films, filmFilter)?.map((film: IFilm) =>
               <FilmItem
@@ -86,8 +87,8 @@ const HomePage = (props: IHomePageProp) => {
         </FilmList>
       </ListColumn>
       <DetailColumn>
-        {!selectedFilm && <YodaQuote src='https://i0.wp.com/mindsetmadebetter.com/wp-content/uploads/2022/02/515-Do-or-do-not.-There-is-no-try..png?fit=1080%2C1080&ssl=1' />}
-        {selectedFilm && <FilmDetail film={selectedFilm} />}
+        {!selectedFilm && <YodaQuote data-testid="quote" src='https://i0.wp.com/mindsetmadebetter.com/wp-content/uploads/2022/02/515-Do-or-do-not.-There-is-no-try..png?fit=1080%2C1080&ssl=1' />}
+        {selectedFilm && <FilmDetail data-testid="detail" film={selectedFilm} />}
       </DetailColumn>
     </HomeWrapper>
   )

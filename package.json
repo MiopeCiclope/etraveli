@@ -38,6 +38,7 @@
   "jest": {
     "collectCoverageFrom": [
       "src/components/**/*.tsx",
+      "src/pages/**/*.tsx",
       "!**/node_modules/**",
       "!**/*.stories.tsx"
     ]

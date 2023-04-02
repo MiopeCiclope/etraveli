@@ -35,7 +35,7 @@ export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, Any
                     return;
                 }
 
-                dispatch(saveList(results as any as IFilm[]))
+                dispatch(saveList(results.map(result => (result as any).value as IFilm)))
             }
             ).finally(() => {
                 dispatch(updateLoading(false))
