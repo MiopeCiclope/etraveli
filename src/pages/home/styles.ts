@@ -62,3 +62,10 @@ export const DetailColumn = styled.div`
     padding-top: 20px;
     height: fit-content;
 `
+
+export const YodaQuote = styled.img`
+    object-fit: contain;
+    max-width: 100%; 
+    max-height: 100%;
+    border-radius: 2px;
+`

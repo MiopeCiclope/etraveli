@@ -5,7 +5,7 @@ import { IFilm } from "../../models/film-model";
 import { selectFilm, updateSearch, loadFilmList, updateSort } from '../../store/film/film-actions';
 import { IFilterOptions } from '../../store/film/film-reducer';
 import { getFilmList } from '../../store/film/film-selectors';
-import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, DetailColumn } from './styles';
+import { ListColumn, FilmList, ListControls, HomeWrapper, SortButtonWrapper, DetailColumn, YodaQuote } from './styles';
 import { SearchBar } from '../../components/search-bar/search-bar';
 import { SortButton } from '../../components/sort-button/sort-button';
 import { FilmItem } from '../../components/film-item/film-item';
@@ -84,7 +84,7 @@ const HomePage = (props: IHomePageProp) => {
         </FilmList>
       </ListColumn>
       <DetailColumn>
-        {!selectedFilm && <div> You can click a film on the list</div>}
+        {!selectedFilm && <YodaQuote src='https://i0.wp.com/mindsetmadebetter.com/wp-content/uploads/2022/02/515-Do-or-do-not.-There-is-no-try..png?fit=1080%2C1080&ssl=1' />}
         {selectedFilm && <FilmDetail film={selectedFilm} />}
       </DetailColumn>
     </HomeWrapper>
