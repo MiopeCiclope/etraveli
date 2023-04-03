@@ -1,4 +1,4 @@
-import { ERROR, SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
+import { CLEAN_LIST, ERROR, SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
 import { IFilm } from "../../models/film-model";
 
 export interface IFilterOptions {
@@ -66,6 +66,12 @@ const filmReducer = (state = INITIAL_STATE, action: IFilmAction) => {
                 ...state,
                 error: (action.payload as string).toLowerCase()
             }
+        case CLEAN_LIST:
+            return {
+                ...state,
+                list: []
+            }
+
         default: return state;
     }
 }

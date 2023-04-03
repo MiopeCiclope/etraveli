@@ -1,4 +1,4 @@
-import { ERROR, SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
+import { CLEAN_LIST, ERROR, SAVE_LIST, SELECT_FILM, UPDATE_LOADING, UPDATE_SEARCH, UPDATE_SORT } from "./film-types";
 import { IFilm, IRating } from "../../models/film-model";
 import { ThunkAction } from "redux-thunk";
 import { ApplicationState, store } from "../store"
@@ -14,6 +14,7 @@ const episodeRomanDigits = ["", "I", "II", "III", "IV", "V", "VI"]
 export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, AnyAction> =>
     async dispatch => {
         dispatch(updateLoading(true))
+        dispatch(clean())
 
         const filmList = await axios.get<IResponse<IFilm>>(baseUrl).then(response => {
             return response.data.results
@@ -42,6 +43,11 @@ export const loadFilmList = (): ThunkAction<void, ApplicationState, unknown, Any
             })
         }
     }
+
+const clean = () => ({
+    type: CLEAN_LIST,
+});
+
 const errorMessage = (errorMessage: string) => ({
     type: ERROR,
     payload: errorMessage

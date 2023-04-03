@@ -34,7 +34,7 @@ export interface SortButtonProps {
 export const SortButton = (props: SortButtonProps) => {
     return (
         <ButtonWrapper
-            data-testid="sortButton"
+            data-testid={`sortButton${props.title}`}
             color={props.color}
             backgroundColor={props.backgroundColor}
             activeBackgroundColor={props.activeBackgroundColor}

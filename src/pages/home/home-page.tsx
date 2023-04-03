@@ -55,7 +55,6 @@ const HomePage = (props: IHomePageProp) => {
       {list.map(property =>
         <SortButton
           key={property}
-          data-testid={`sortButton${property}`}
           title={titleDict[property]}
           buttonState={filmFilter?.sort === property ? filmFilter?.sortDirection ?? "off" : "off"}
           color='black'
@@ -71,7 +70,7 @@ const HomePage = (props: IHomePageProp) => {
     <HomeWrapper>
       <ListColumn>
         <ListControls>
-          <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." data-testid="searchBar" />
+          <SearchBar value={filmFilter?.search ?? ""} onChange={handleInputChange} placeholder="Type search here..." />
           {makeSortButtons(["release_date", "episode_id", "averageRating"])}
         </ListControls>
         <FilmList >
@@ -88,7 +87,7 @@ const HomePage = (props: IHomePageProp) => {
       </ListColumn>
       <DetailColumn>
         {!selectedFilm && <YodaQuote data-testid="quote" src='https://i0.wp.com/mindsetmadebetter.com/wp-content/uploads/2022/02/515-Do-or-do-not.-There-is-no-try..png?fit=1080%2C1080&ssl=1' />}
-        {selectedFilm && <FilmDetail data-testid="detail" film={selectedFilm} />}
+        {selectedFilm && <FilmDetail film={selectedFilm} />}
       </DetailColumn>
     </HomeWrapper>
   )

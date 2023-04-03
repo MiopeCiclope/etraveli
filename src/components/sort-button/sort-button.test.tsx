@@ -52,7 +52,7 @@ describe('SortButton component', () => {
         const handleInputChange = jest.fn();
 
         render(<SortButtonDesc {...SortButtonDesc.args as any} onChange={handleInputChange} />);
-        const button = screen.getByTestId("sortButton");
+        const button = screen.getByTestId("sortButtonDate");
 
         expect(button).toHaveStyle("background-color: lightgreen")
     });

@@ -16,7 +16,7 @@ export interface IFilmItemProps {
 export const FilmDetail = (props: IFilmItemProps) => {
     const { film } = props
     return (
-        <DetailWrapper>
+        <DetailWrapper data-testid="detail" >
             <Title>{`Episode ${film.episode_id}: ${film.title} `}</Title>
             <small>Directed by: {film.director}</small>
             <Body>
